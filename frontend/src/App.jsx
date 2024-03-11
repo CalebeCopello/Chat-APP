@@ -14,7 +14,7 @@ const App = () => {
 	useEffect(() => {
 		socket.on('receiveMessage', (data) => {
 			console.log(data)
-			setChat((prev) => [...prev, data.message])
+			setChat((prev) => [...prev, data])
 		})
 		return () => {
 			socket.off('receiveMessage')
@@ -29,8 +29,8 @@ const App = () => {
 			/>
 			<button onClick={() => handleMessage()}>message</button>
 			<div>
-				{chat.map((message, index) => (
-					<div key={index}>{message}</div>
+				{chat.map((chat, index) => (
+					<div key={index}>{chat.date} / {chat.id} / {chat.message}</div>
 				))}
 			</div>
 		</div>

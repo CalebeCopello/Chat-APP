@@ -18,8 +18,7 @@ app.use(cors())
 io.on('connection', (socket) => {
     console.log(`User Connected: ${socket.id}`)
     socket.on('sendMessage', (data) => {
-        socket.emit('receiveMessage', data)
-        socket.broadcast.emit('receiveMessage', data)
+        io.emit('receiveMessage', data)
     })
 })
 
