@@ -5,6 +5,7 @@ import { Button, TextInput } from 'flowbite-react'
 const Header = ({ socket }) => {
 	const [user, setUser] = useState('')
 	const [nick, setNick] = useState('')
+    const [totalUsers, setTotalUsers] = useState('')
 
 	const handleChangeUsername = (e) => {
 		e.preventDefault
@@ -14,26 +15,34 @@ const Header = ({ socket }) => {
 		setNick(e)
 	}
     const handleChangeUsernameSubmit = () => {
-        
+        socket.emit('changeNick', nick)
+        console.log('changenick')
     }
 
 	useEffect(() => {
 		socket.on('userId', (data) => {
 			setUser(data)
 		})
-	})
-
+        socket.on('usersUpdate', (data) => {
+            setTotalUsers(data)
+        })
+	}, [socket])
+    console.log(totalUsers)
 	return (
 		<header className='border border-yellow-600'>
 			<div className=''>
 				<form>
 					<TextInput
-						value={user}
+						value={nick}
+                        placeholder={user}
 						onChange={(e) => handleChangeUsername(e.target.value)}
 					/>
                     <Button onClick={handleChangeUsernameSubmit}>Alterar</Button>
 				</form>
 			</div>
+            <div className="">
+                Total de Usuários: {Object.keys(totalUsers).length}
+            </div>
 		</header>
 	)
 }

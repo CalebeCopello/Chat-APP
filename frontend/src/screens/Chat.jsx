@@ -1,11 +1,12 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react'
-import { TextInput, Button } from 'flowbite-react'
-import { textInputThemeConfig, buttonThemeConfig } from '../configs/theme.js'
+import { Textarea, Button } from 'flowbite-react'
+import { textareaThemeConfig, buttonThemeConfig } from '../configs/theme.js'
 
-const Chat = ({ socket }) => {
+const Chat = ({ socket, users }) => {
 	const [message, setMessage] = useState('')
 	const [chat, setChat] = useState([])
+	const [user, setUser] = useState('')
 	const handleMessage = () => {
 		const d = new Date()
 		socket.emit('sendMessage', { message: message, id: socket.id, date: d })
@@ -19,13 +20,15 @@ const Chat = ({ socket }) => {
 		})
 		socket.on('receiveMessage', (data) => {
 			setChat((prev) => [data, ...prev])
-			console.log('receiveMessage')
+		})
+		socket.on('userId', (data) => {
+			setUser(data)
 		})
 		return () => {
 			socket.off('receiveMessage')
 		}
 	}, [socket])
-	console.log(chat)
+	console.log(users)
 	return (
 		<>
 			<div className='flex flex-col m-auto w-full max-w-screen-lg'>
@@ -38,8 +41,8 @@ const Chat = ({ socket }) => {
 						))}
 					</div>
 					<div className='flex w-full max-w-screen-lg mx-auto border border-green-600 gap-4 p-3 '>
-						<TextInput
-							theme={textInputThemeConfig}
+						<Textarea
+							theme={textareaThemeConfig}
 							value={message}
 							onChange={(e) => setMessage(e.target.value)}
 							className='resize-none'
