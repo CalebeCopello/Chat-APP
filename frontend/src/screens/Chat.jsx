@@ -24,11 +24,15 @@ const Chat = ({ socket, users }) => {
 		socket.on('userId', (data) => {
 			setUser(data)
 		})
+		socket.on('updateMessage', (data) => {
+			setChat(data)
+			console.log(data)
+		})
 		return () => {
 			socket.off('receiveMessage')
 		}
 	}, [socket])
-	console.log(users)
+	console.log(chat)
 	return (
 		<>
 			<div className='flex flex-col m-auto w-full max-w-screen-lg'>

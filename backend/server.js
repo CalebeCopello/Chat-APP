@@ -52,6 +52,7 @@ io.on('connection', (socket) => {
 		users[socket.id] = data
 		changeUsers()
 		io.emit('usersUpdate', users)
+		io.emit('updateMessage', chatLog)
 	})
 
 	socket.on('disconnect', () => {

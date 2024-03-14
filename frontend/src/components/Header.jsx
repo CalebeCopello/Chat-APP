@@ -16,7 +16,6 @@ const Header = ({ socket }) => {
 	}
     const handleChangeUsernameSubmit = () => {
         socket.emit('changeNick', nick)
-        console.log('changenick')
     }
 
 	useEffect(() => {
@@ -27,7 +26,6 @@ const Header = ({ socket }) => {
             setTotalUsers(data)
         })
 	}, [socket])
-    console.log(totalUsers)
 	return (
 		<header className='border border-yellow-600'>
 			<div className=''>
