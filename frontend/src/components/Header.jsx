@@ -31,7 +31,6 @@ const Header = ({ socket }) => {
 			<div className=''>
 				<form>
 					<TextInput
-						value={nick}
                         placeholder={user}
 						onChange={(e) => handleChangeUsername(e.target.value)}
 					/>

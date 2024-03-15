@@ -15,18 +15,19 @@ const Chat = ({ socket, users }) => {
 	useEffect(() => {
 		socket.on('chatLog', (data) => {
 			const chatLog = data.reverse()
-			console.log(chatLog)
 			setChat(chatLog)
+			// console.log('chatlog', chat)
 		})
 		socket.on('receiveMessage', (data) => {
-			setChat((prev) => [data, ...prev])
+			setChat(data)
+			// console.log('receiveMessage', chat)
 		})
 		socket.on('userId', (data) => {
 			setUser(data)
 		})
 		socket.on('updateMessage', (data) => {
 			setChat(data)
-			console.log(data)
+			// console.log('updateMessage', chat)
 		})
 		return () => {
 			socket.off('receiveMessage')

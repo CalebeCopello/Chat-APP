@@ -22,6 +22,7 @@ const chatLog = []
 const users = {}
 
 io.on('connection', (socket) => {
+	// console.log(`user: ${socket.id} connected`)
 	const changeUsers = () => {
 		for (let i = 0; i < chatLog.length; i++) {
 			Object.keys(users).forEach((key) => {
@@ -39,12 +40,14 @@ io.on('connection', (socket) => {
 	}
 	// console.log('users:', users)
 	socket.on('sendMessage', (data) => {
-		io.emit('receiveMessage', data)
 		if (chatLog.length > 5) {
 			chatLog.pop()
 		}
 		chatLog.unshift(data)
 		changeUsers()
+		console.log(data)
+		console.log(chatLog)
+		io.emit('receiveMessage', chatLog)
 		// console.log(chatLog)
 	})
 
