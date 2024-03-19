@@ -40,13 +40,11 @@ io.on('connection', (socket) => {
 	}
 	// console.log('users:', users)
 	socket.on('sendMessage', (data) => {
-		if (chatLog.length > 5) {
+		if (chatLog.length > 150) {
 			chatLog.pop()
 		}
 		chatLog.unshift(data)
 		changeUsers()
-		console.log(data)
-		console.log(chatLog)
 		io.emit('receiveMessage', chatLog)
 		// console.log(chatLog)
 	})
