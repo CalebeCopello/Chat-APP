@@ -1,10 +1,12 @@
+import Register from './Components/Register'
 function App() {
-
-  return (
-    <>
-    <div className="">Hello World!</div>
-    </>
-  )
+	return (
+		<>
+			<div className='bg-bg0_lm'>
+				<Register />
+			</div>
+		</>
+	)
 }
 
 export default App
