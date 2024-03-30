@@ -20,6 +20,7 @@ const signup = async (req, res, next) => {
         await newUser.save()
         res.json({message: `${usernameTrimmed} cadastrado com sucesso`})
     } catch (error) {
+        res.status(500).json({ message: `Erro: ${error}` })
         next(error)
     }
 }
