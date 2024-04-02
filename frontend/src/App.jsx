@@ -1,4 +1,6 @@
-import Register from './Components/Register'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import SignUp from './Components/SignUp'
+import SignIn from './Components/SignIn'
 import axios from 'axios'
 function App() {
 	axios.defaults.baseURL = 'http://localhost:3077'
@@ -6,7 +8,18 @@ function App() {
 	return (
 		<>
 			<div className='bg-bg0_lm'>
-				<Register />
+				<BrowserRouter>
+					<Routes>
+						<Route
+							path='/'
+							element={<SignUp />}
+						/>
+						<Route
+							path='/signin'
+							element={<SignIn />}
+						/>
+					</Routes>
+				</BrowserRouter>
 			</div>
 		</>
 	)

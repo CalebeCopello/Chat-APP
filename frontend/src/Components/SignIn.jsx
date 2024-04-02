@@ -3,7 +3,7 @@ import { buttonThemeConfig, textInputThemeConfig } from '../configs/theme'
 import { useState } from 'react'
 import axios from 'axios'
 
-function Register() {
+function SignIn() {
 	const [username, setUsername] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
@@ -24,14 +24,17 @@ function Register() {
 		try {
 			setLoading(true)
 			await axios.post('/api/auth/signup', { username, email, password })
-			console.log('ok')
-			// setError('')
+			setError('')
 			setSuccess('Cadastro feito com sucesso!')
-		} catch (error) {
-			setError(error.response.data.message)
+		} catch (err) {
+			setError(err.response.data.message)
+			if (error.includes(username)) {
+				setError('Nome de usuário já existe!\nEscolha outro')
+			} else if (error.includes(email)) {
+				setError('Email já cadastrado')
+			}
 		} finally {
 			setLoading(false)
-			console.log(error)
 		}
 	}
 	return (
@@ -41,13 +44,6 @@ function Register() {
 					onSubmit={handleSubmit}
 					className='w-64 mx-auto mb-12'
 				>
-					<TextInput
-						theme={textInputThemeConfig}
-						className='mb-2'
-						onChange={(e) => setUsername(e.target.value)}
-						value={username}
-						placeholder='Username'
-					></TextInput>
 					<TextInput
 						theme={textInputThemeConfig}
 						className='mb-2'
@@ -64,18 +60,11 @@ function Register() {
 						value={password}
 						placeholder='Senha'
 					></TextInput>
-					<TextInput
-						theme={textInputThemeConfig}
-						className='mb-2'
-						type='password'
-						onChange={(e) => setConfirmPassword(e.target.value)}
-						value={confirmPassword}
-						placeholder='Confirmar Senha'
-					></TextInput>
 					<Button
 						theme={buttonThemeConfig}
 						className='mb-2 w-full'
 						onClick={handleSubmit}
+						disabled={loading}
 					>
 						{' '}
 						{loading ? <Spinner></Spinner> : 'Registrar'}
@@ -88,4 +77,4 @@ function Register() {
 	)
 }
 
-export default Register
+export default SignIn
