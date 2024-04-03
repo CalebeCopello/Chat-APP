@@ -4,10 +4,8 @@ import { useState } from 'react'
 import axios from 'axios'
 
 function SignIn() {
-	const [username, setUsername] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
-	const [confirmPassword, setConfirmPassword] = useState('')
 	const [error, setError] = useState('')
 	const [success, setSuccess] = useState('')
 	const [loading, setLoading] = useState(false)
@@ -15,24 +13,15 @@ function SignIn() {
 		setError('')
 		setSuccess('')
 		e.preventDefault()
-		if (!username || !email || !password || !confirmPassword) {
+		if (!email || !password) {
 			return setError('Todos os campos devem ser preenchidos')
-		}
-		if (password !== confirmPassword) {
-			return setError('As senhas devem ser iguais')
 		}
 		try {
 			setLoading(true)
-			await axios.post('/api/auth/signup', { username, email, password })
+			await axios.post('/api/auth/signin', { email, password })
 			setError('')
-			setSuccess('Cadastro feito com sucesso!')
 		} catch (err) {
-			setError(err.response.data.message)
-			if (error.includes(username)) {
-				setError('Nome de usuário já existe!\nEscolha outro')
-			} else if (error.includes(email)) {
-				setError('Email já cadastrado')
-			}
+			console.log(err)
 		} finally {
 			setLoading(false)
 		}
