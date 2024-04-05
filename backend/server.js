@@ -12,7 +12,7 @@ connectDB()
 const PORT = process.env.PORT
 app.use(express.json())
 app.use(cookieParser())
-const allowedOrigins = ['http://192.168.2.107:5173', 'http://localhost:5173'];
+const allowedOrigins = ['http://192.168.2.105:5173', 'http://localhost:5173'];
 app.use(cors({
     credentials: true,
     origin: allowedOrigins

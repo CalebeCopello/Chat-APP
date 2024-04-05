@@ -15,7 +15,7 @@ const signup = async (req, res, next) => {
 		emailTrimmed === '' ||
 		password == ''
 	) {
-		next(errorHandler(400, 'Todos os campos devem ser preenchidos'))
+		return next(errorHandler(400, 'Todos os campos devem ser preenchidos'))
 	}
 	//TODO: encrypt password
 	const newUser = new User({
@@ -35,12 +35,8 @@ const signup = async (req, res, next) => {
 const signin = async (req, res, next) => {
 	const { email, password } = req.body
 	const emailTrimmed = email ? email.trim() : email
-    if (email === emailTrimmed) {
-        console.log('same')
-    }
-    console.log(emailTrimmed, email, password)
 	if (!emailTrimmed || !password || emailTrimmed === '' || password === '') {
-		next(errorHandler(400, 'Todos os campos devem ser preenchidos'))
+		return next(errorHandler(400, 'Todos os campos devem ser preenchidos'))
 	}
 	try {
 		const validUSer = await User.findOne({ email: emailTrimmed })
@@ -55,7 +51,7 @@ const signin = async (req, res, next) => {
 			expiresIn: '30 days',
 		})
 		const { password: psw, ...rest } = validUSer._doc
-		res.status(200).cookie('access_token', token, { httpOnly: true }).json({rest})
+		res.status(200).cookie('access_token', token, { httpOnly: true, secure: true, sameSite:'none' }).json({rest})
 	} catch (error) {
         next(error)
     }

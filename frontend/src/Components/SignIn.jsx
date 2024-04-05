@@ -2,28 +2,31 @@ import { TextInput, Button, Alert, Spinner } from 'flowbite-react'
 import { buttonThemeConfig, textInputThemeConfig } from '../configs/theme'
 import { useState } from 'react'
 import axios from 'axios'
+import { signInStart, signInSuccess, signInFailure } from '../slices/userSlice'
+import { useDispatch, useSelector } from 'react-redux'
 
 function SignIn() {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
-	const [error, setError] = useState('')
-	const [success, setSuccess] = useState('')
-	const [loading, setLoading] = useState(false)
+	const {loading, error} = useSelector(state => state.user)
+	const dispatch = useDispatch()
 	const handleSubmit = async (e) => {
-		setError('')
-		setSuccess('')
 		e.preventDefault()
 		if (!email || !password) {
-			return setError('Todos os campos devem ser preenchidos')
+			return dispatch(signInFailure('Todos os campos devem ser preenchidos'))
 		}
+		dispatch(signInStart())
 		try {
-			setLoading(true)
-			await axios.post('/api/auth/signin', { email, password })
-			setError('')
+			const data = await axios.post('/api/auth/signin', { email, password })
+			console.log(data.data.rest)
+			dispatch(signInSuccess(data.data.rest))
 		} catch (err) {
-			console.log(err)
-		} finally {
-			setLoading(false)
+			const errorMessageHTML = err.response.data
+			const errorMatch = errorMessageHTML.match(/Error: (.*?)(?=<br>)/)
+			const errorMessage = errorMatch ? errorMatch[1] : 'Erro desconhecido'
+			console.log(err.response.data)
+			console.log(errorMessage)
+			dispatch(signInFailure(errorMessage))
 		}
 	}
 	return (
@@ -59,7 +62,6 @@ function SignIn() {
 						{loading ? <Spinner></Spinner> : 'Registrar'}
 					</Button>
 					{error && <Alert color='failure'>{error}</Alert>}
-					{success && <Alert>{success}</Alert>}
 				</form>
 			</div>
 		</>
